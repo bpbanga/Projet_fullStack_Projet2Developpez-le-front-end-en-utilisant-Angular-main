@@ -1,0 +1,22 @@
+<div class="graph-container">
+  <ngx-charts-line-chart
+    [results]="multi"
+    [view]="view"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [timeline]="timeline"
+    [animations]="animations"
+    [scheme]="colorScheme"
+    (select)="onSelect($event)">
+  </ngx-charts-line-chart>
+
+  <div  *ngIf="!multi || multi.length === 0" class="no-data">
+    <p>Aucune donnée à afficher.</p>
+  </div>
+</div>
+

@@ -7,7 +7,7 @@ import { OlympicCountry } from '../models/Olympic';
   providedIn: 'root',
 })
 export class DataService {
-  private apiUrl = 'https://api/olympics'; // Remplace par ton API réelle
+  private apiUrl = './assets/mock/olympic.json'; // Remplace par ton API réelle
 
   constructor(private http: HttpClient) {}
 
@@ -15,3 +15,5 @@ export class DataService {
     return this.http.get<OlympicCountry[]>(this.apiUrl);
   }
 }
+
+
