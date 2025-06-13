@@ -1,7 +1,7 @@
-<div class="graph-container">
+<div #containerRef class="graph-container">
   <ngx-charts-line-chart
     [results]="multi"
-    [view]="view"
+    [view]="[containerRef.offsetWidth, 300]"
     [legend]="legend"
     [showXAxisLabel]="showXAxisLabel"
     [showYAxisLabel]="showYAxisLabel"

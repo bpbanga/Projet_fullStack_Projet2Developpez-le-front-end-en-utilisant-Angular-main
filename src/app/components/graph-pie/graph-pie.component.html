@@ -1,4 +1,6 @@
-<ngx-charts-pie-chart
+<div  #containerRef >
+   <ngx-charts-pie-chart
+  [view]="[containerRef.offsetWidth, 400]"
   [scheme]="colorScheme"
   [results]="single"
   [legend]="legend"
@@ -8,3 +10,4 @@
   [explodeSlices]="explodeSlices"
   (select)="onSelect($event)">
 </ngx-charts-pie-chart>
+</div>

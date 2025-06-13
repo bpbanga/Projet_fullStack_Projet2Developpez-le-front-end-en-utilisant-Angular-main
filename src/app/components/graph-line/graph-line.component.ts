@@ -16,7 +16,6 @@ export class GraphLineComponent  implements OnInit{
 
   colorScheme = 'cool';
   multi: { name: string; series:{ name : String; value: number} []; id: number }[] = [];
-  view: [number,number] = [700, 300];
 
   // options
   legend: boolean = false;
