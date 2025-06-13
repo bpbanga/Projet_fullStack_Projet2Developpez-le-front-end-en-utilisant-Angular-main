@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { OlympicCountry } from '../models/Olympic';
 
 @Injectable({
@@ -25,8 +25,26 @@ export class OlympicService {
       })
     );
   }
-
   getOlympics() {
-    return this.olympics$.asObservable();
+  return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
+    catchError((error, caught) => {
+      console.error(" Erreur de chargement des données :", error);
+      return caught;
+    })
+  );
+}
+
+
+  getOlympicsById( id : number){
+
+    return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
+      map((countries) => countries.find(country => country.id === id)
+    ),
+      catchError((error, caught) => {
+        // TODO: improve error handling
+        console.error(error);       
+        return caught;
+      })
+    );
   }
 }
