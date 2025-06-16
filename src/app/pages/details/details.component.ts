@@ -1,14 +1,12 @@
-
-
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
-import { catchError, map, startWith } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
   standalone: false
@@ -16,22 +14,31 @@ import { catchError, map, startWith } from 'rxjs/operators';
 export class DetailsComponent {
   public country$: Observable<OlympicCountry | undefined>;
   public infos$: Observable<{ title: string; text: string }[]> = of([]);
+
   constructor(
     private olympicService: OlympicService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     const countryId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.country$ = this.olympicService.getOlympicsById(countryId).pipe(
-      catchError(() => {
-        console.error("Erreur de chargement du pays");
+      tap((country) => {
+        if (!country) {
+          console.warn('Pays introuvable, redirection vers /not-found');
+          this.router.navigate(['/not-found']);
+        }
+      }),
+      catchError((err) => {
+        console.error("Erreur lors du chargement du pays :", err);
+        this.router.navigate(['/not-found']);
         return of(undefined);
       })
     );
 
-   this.infos$ = this.country$.pipe(
+    this.infos$ = this.country$.pipe(
       map((country) => {
-        if (!country || !Array.isArray(country?.participations)) {
+        if (!country || !Array.isArray(country.participations)) {
           return [];
         }
         return [
