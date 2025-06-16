@@ -1,6 +1,9 @@
 # OlympicGamesStarter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
+rxjs                            7.8.1
+typescript                      5.8.3
+zone.js                         0.15.1
 
 Don't forget to install your node_modules before starting (`npm install`).
 
