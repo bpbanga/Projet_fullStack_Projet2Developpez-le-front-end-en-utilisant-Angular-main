@@ -25,26 +25,34 @@ export class OlympicService {
       })
     );
   }
-  getOlympics() {
-  return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
-    catchError((error, caught) => {
-      console.error(" Erreur de chargement des données :", error);
-      return caught;
-    })
+//   getOlympics() {
+//   return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
+//     catchError((error, caught) => {
+//       console.error(" Erreur de chargement des données :", error);
+//       return caught;
+//     })
+//   );
+// }
+//   getOlympicsById( id : number){
+
+//     return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
+//       map((countries) => countries.find(country => country.id === id)
+//     ),
+//       catchError((error, caught) => {
+//         // TODO: improve error handling
+//         console.error(error);       
+//         return caught;
+//       })
+//     );
+//   }
+getOlympics() {
+  return this.olympics$.asObservable();
+}
+
+getOlympicsById(id: number) {
+  return this.olympics$.pipe(
+    map(countries => countries.find(c => c.id === id))
   );
 }
 
-
-  getOlympicsById( id : number){
-
-    return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
-      map((countries) => countries.find(country => country.id === id)
-    ),
-      catchError((error, caught) => {
-        // TODO: improve error handling
-        console.error(error);       
-        return caught;
-      })
-    );
-  }
 }

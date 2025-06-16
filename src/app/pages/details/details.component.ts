@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+
+
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
+import { catchError, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -10,45 +13,33 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./details.component.scss'],
   standalone: false
 })
-export class DetailsComponent implements OnInit {
-  public country$: Observable<OlympicCountry | undefined> = of(undefined);
-  public infos: { title: string; text: string }[] = [];
-
+export class DetailsComponent {
+  public country$: Observable<OlympicCountry | undefined>;
+  public infos$: Observable<{ title: string; text: string }[]> = of([]);
   constructor(
     private olympicService: OlympicService,
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     const countryId = Number(this.route.snapshot.paramMap.get('id'));
-    this.country$ = this.olympicService.getOlympicsById(countryId);
 
-    this.country$.subscribe({
-      next: (country) => {
-        console.log("Pays reçu :", country);
+    this.country$ = this.olympicService.getOlympicsById(countryId).pipe(
+      catchError(() => {
+        console.error("Erreur de chargement du pays");
+        return of(undefined);
+      })
+    );
 
-        if (!country || !Array.isArray(country.participations)) {
-          console.error("Pays ou participations invalides !");
-          return;
+   this.infos$ = this.country$.pipe(
+      map((country) => {
+        if (!country || !Array.isArray(country?.participations)) {
+          return [];
         }
-
-        const numberOfEntries = country.participations.length;
-
-        const totalMedals = country.participations.reduce((acc, participation) => {
-          return acc + (participation.medalsCount || 0);
-        }, 0);
-
-        const totalAthletes = country.participations.reduce((acc, participation) => {
-          return acc + (participation.athleteCount || 0);
-        }, 0);
-
-        this.infos = [
-          { title: "Number of Entries", text: numberOfEntries.toString() },
-          { title: "Total Number of Medals", text: totalMedals.toString() },
-          { title: "Total Number of Athletes", text: totalAthletes.toString() }
+        return [
+          { title: "Number of Entries", text: country.participations.length.toString() },
+          { title: "Total Number of Medals", text: country.participations.reduce((acc, p) => acc + (p.medalsCount || 0), 0).toString() },
+          { title: "Total Number of Athletes", text: country.participations.reduce((acc, p) => acc + (p.athleteCount || 0), 0).toString() }
         ];
-      },
-      error: (err) => console.error("Erreur de chargement du pays", err)
-    });
+      }),
+    );
   }
 }

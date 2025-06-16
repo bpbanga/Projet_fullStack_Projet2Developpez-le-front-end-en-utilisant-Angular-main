@@ -1,8 +1,7 @@
 <div class="home-container">
   <app-title [text]="' Medals per Country'"></app-title>
   <app-informations [infos]="infos"></app-informations>
-
-  <div *ngIf="olympics$ | async as olympics">
-    <app-graph-pie [olympics]="olympics"></app-graph-pie>
-  </div>
+  <ng-container *ngIf="olympicData$ | async as data">
+    <app-graph-pie [olympics]="data"></app-graph-pie>
+  </ng-container>
 </div>

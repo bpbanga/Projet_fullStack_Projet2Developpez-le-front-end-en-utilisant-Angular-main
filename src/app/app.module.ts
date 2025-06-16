@@ -11,7 +11,7 @@ import { TitleComponent } from './components/title/title.component';
 import { GraphLineComponent } from './components/graph-line/graph-line.component';
 import { GraphPieComponent } from './components/graph-pie/graph-pie.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // <-- C'est bien celui-ci !
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InformationsComponent } from './components/informations/informations.component';
 
 @NgModule({

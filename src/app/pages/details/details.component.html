@@ -1,13 +1,8 @@
 <div *ngIf="country$ | async as country">
   <div class="details-container">
     <app-title [text]="country.country"></app-title>
-    <app-informations [infos]="infos"></app-informations>
+    <app-informations [infos]="(infos$ | async) || []"></app-informations>
     <app-graph-line [country]="country"></app-graph-line> 
     <a class="button" routerLink="/dashboard">Retour</a>
   </div>
 </div>
-
-
-
-
-
